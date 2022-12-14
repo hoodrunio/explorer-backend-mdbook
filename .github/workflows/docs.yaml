@@ -1,0 +1,29 @@
+name: Docs
+
+# We document the main branch
+on:
+  push:
+    branches: [ main ]  
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3       
+    - name: Install MDBook
+      run: cargo install mdbook
+    - name: Install MDBook Katex
+      run: cargo install mdbook-katex
+    - name: Run tests # This creates the IO docs
+      run: cargo test --verbose     
+    - name: Build Book
+      run: mdbook build ./docs/ioreference
+    - name: Build doc
+      run: RUSTDOCFLAGS="--html-in-header katex.html" cargo doc --no-deps --document-private-items --target-dir ./docs/rustdoc
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@4.1.5
+      with:
+        branch: gh-pages
+        folder: docs
