@@ -19,7 +19,7 @@ jobs:
     - name: Run tests # This creates the IO docs
       run: cargo test --verbose     
     - name: Build Book
-      run: mdbook build ./docs/ioreference
+      run: mdbook build ./
     - name: Build doc
       run: RUSTDOCFLAGS="--html-in-header katex.html" cargo doc --no-deps --document-private-items --target-dir ./docs/rustdoc
     - name: Deploy
